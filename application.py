@@ -126,13 +126,24 @@ def getAnswer():
     #text = page.content
 
 
-    __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-    filepath=os.path.join(__location__, 'pentagon.txt')
-    with open(filepath,'r') as file:
-        text = file.read()
+    # __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+    # filepath=os.path.join(__location__, 'pentagon.txt')
+    # with open(filepath,'r') as file:
+    #     text = file.read()
 
+    # reader.tokenize(question, text)
+    #print(f"Answer: {reader.get_answer()}")   
+
+
+
+
+    print(f"Question: {question}")
+    results = wiki.search(question)
+    page = wiki.page(results[0])
+    text = page.content
     reader.tokenize(question, text)
-    #print(f"Answer: {reader.get_answer()}")    
+
+
     return reader.get_answer()
 
 
