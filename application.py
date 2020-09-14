@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,request
 import torch
 import wikipedia as wiki
 
@@ -91,67 +91,42 @@ class DocumentReader:
         return self.tokenizer.convert_tokens_to_string(self.tokenizer.convert_ids_to_tokens(input_ids))
 
 print("Start class initilisation")
-reader = DocumentReader("deepset/bert-base-cased-squad2") 
+reader = DocumentReader("deepset/bert-large-uncased-whole-word-masking-squad2") 
 print("End class initilisation")
 
-def getAnswer():
-    question = 'How many sides does a pentagon have?'  
+text = """EY DNA is a Multi-Tenant solution and used highly modularized independent apps for each 
+Lego Blocks using Micro FE and Micro Services. Individual Lego Block has their own life-cycle, 
+gets deployed independently and are composed by the Framework to work as a single solution. 
+Each solution is composed of several Lego Blocks and always works with the latest version of the Lego Block. 
+Solution upgrades are not necessary unless the solution composition changes.
 
-    # reader = DocumentReader("deepset/bert-base-cased-squad2") 
+root path dev url is https://eydna-nxt-root-web-dev.sbp.eyclienthub.com.
+auth server dev url is https://eydna-nxt-auth-api-dev.sbp.eyclienthub.com.
+base app dev url is https://eydna-nxt-base-web-dev.sbp.eyclienthub.com.
 
-    # if you trained your own model using the training cell earlier, you can access it with this:
-    #reader = DocumentReader("./models/bert/bbu_squad2")
+root path qa url is https://eydna-nxt-root-web-qa.sbp.eyclienthub.com.
+auth server qa url is https://eydna-nxt-auth-api-qa.sbp.eyclienthub.com.
+base app dev qa url is https://eydna-nxt-base-web-qa.sbp.eyclienthub.com.
+"""
 
-    # for question in questions:
-    #     print(f"Question: {question}")
-    #     results = wiki.search(question)
+def getAnswer(question):
+    #question = 'How many sides does a pentagon have?'  
 
-    #     page = wiki.page(results[0])
-    #     print(f"Top wiki result: {page}")
-
-    #     text = page.content
-
-    #     reader.tokenize(question, text)
-    #     print(f"Answer: {reader.get_answer()}")
-    #     print()
-    #     return reader.get_answer()
-
-    
-    #print(f"Question: {question}")
-    #results = wiki.search(question)
-
-    #page = wiki.page(results[0])
-    #print(f"Top wiki result: {page}")
-
-    #text = page.content
-
-
-    # __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-    # filepath=os.path.join(__location__, 'pentagon.txt')
-    # with open(filepath,'r') as file:
-    #     text = file.read()
-
-    # reader.tokenize(question, text)
-    #print(f"Answer: {reader.get_answer()}")   
-
-
-
-
-    print(f"Question: {question}")
-    results = wiki.search(question)
-    page = wiki.page(results[0])
-    text = page.content
+    print(f"Question: {question}")    
     reader.tokenize(question, text)
-
-
     return reader.get_answer()
 
 
 @app.route('/')
-def hello():
-    answer=getAnswer()
-    print(answer)
-    return answer
+def hello():    
+    return "APP is running!"
+
+@app.route('/ask')
+def ask():
+    q=request.args['q']
+    answer=getAnswer(q)
+    #print(answer)
+    return answer    
 
 
 if __name__=='__main__':
